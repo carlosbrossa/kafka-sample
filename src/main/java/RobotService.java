@@ -5,10 +5,10 @@ public class RobotService {
     public static void main(String[] args) throws InterruptedException {
 
         var robotService = new RobotService();
-        var kafkaService = new KafkaService(RobotService.class.getSimpleName(), "SCHEDULE",
-                robotService::parse);
-        kafkaService.run();
-
+        try(var kafkaService = new KafkaService(RobotService.class.getSimpleName(), "SCHEDULE",
+                robotService::parse)) {
+            kafkaService.run();
+        }
 
     }
 

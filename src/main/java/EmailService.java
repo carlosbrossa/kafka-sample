@@ -5,9 +5,11 @@ public class EmailService {
     public static void main(String[] args) throws InterruptedException {
 
         var emailService = new EmailService();
+        try(
         var service = new KafkaService(EmailService.class.getSimpleName(), "SCHEDULE_SEND_EMAIL",
-                emailService::parse);
-        service.run();
+                emailService::parse)){
+            service.run();
+        }
 
     }
 
