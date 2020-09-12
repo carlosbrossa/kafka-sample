@@ -5,17 +5,23 @@ public class NewScheduleMain {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-        try(var kafkaDispatcher = new KafkaDispatcher()) {
+        try(var scheduleKafkaDispatcher = new KafkaDispatcher<Schedule>()){
+            try(var emailKafkaDispatcher = new KafkaDispatcher<String>()) {
 
-            for (var i = 0; i < 10; i++) {
+                for (var i = 0; i < 10; i++) {
 
-                var value = "545445,32442,777777";
-                var key = value + UUID.randomUUID().toString();
-                kafkaDispatcher.send("SCHEDULE", key, value);
+                    String userId = UUID.randomUUID().toString();
+                    String scheduleId = UUID.randomUUID().toString();
+                    String examId = "HEMO";
 
-                var email = "thank you for your order";
-                kafkaDispatcher.send("SCHEDULE_SEND_EMAIL", key, email);
+                    var schedule = new Schedule(userId, scheduleId, examId);
 
+                    scheduleKafkaDispatcher.send("SCHEDULE", userId, schedule);
+
+                    var email = "Your exam is scheduled";
+                    emailKafkaDispatcher.send("SCHEDULE_SEND_EMAIL", userId, email);
+
+                }
             }
         }
 
