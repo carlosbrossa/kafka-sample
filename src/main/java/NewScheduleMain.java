@@ -14,7 +14,7 @@ public class NewScheduleMain {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         var producer = new KafkaProducer<String, String>(properties());
 
-        for (var i = 0; i < 500; i++) {
+        for (var i = 0; i < 10; i++) {
 
             var value = "545445,32442,777777";
             var key = value + UUID.randomUUID().toString();
