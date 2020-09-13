@@ -1,3 +1,5 @@
+package br.com.sample;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.kafka.common.header.Headers;

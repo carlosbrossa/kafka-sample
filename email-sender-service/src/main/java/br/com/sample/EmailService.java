@@ -1,3 +1,5 @@
+package br.com.sample;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.Map;

@@ -1,3 +1,5 @@
+package br.com.sample;
+
 public class Schedule {
 
     private final String userId, scheduleId;

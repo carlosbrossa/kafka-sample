@@ -1,3 +1,5 @@
+package br.com.sample;
+
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 

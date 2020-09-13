@@ -1,3 +1,5 @@
+package br.com.sample;
+
 public class Email {
 
     private final String email, subject;
