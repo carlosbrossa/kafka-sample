@@ -17,8 +17,8 @@ public class Schedule {
         return userId;
     }
 
-    public String getEmail() {
-        return email;
+    public String getExamCode() {
+        return examCode;
     }
 
     @Override
@@ -26,8 +26,8 @@ public class Schedule {
         return "Schedule{" +
                 "userId='" + userId + '\'' +
                 ", scheduleId='" + scheduleId + '\'' +
-                ", examCode='" + examCode + '\'' +
                 ", email='" + email + '\'' +
+                ", examCode='" + examCode + '\'' +
                 '}';
     }
 }

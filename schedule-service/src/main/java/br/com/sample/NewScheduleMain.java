@@ -14,14 +14,15 @@ public class NewScheduleMain {
 
                     String userId = UUID.randomUUID().toString();
                     String scheduleId = UUID.randomUUID().toString();
-                    String examId = "HEMO";
+                    String examId = Math.random() + "HEMO";
 
-                    var schedule = new Schedule(userId, scheduleId, examId);
+                    var email = Math.random() + "@email";
+                    var schedule = new Schedule(userId, scheduleId, examId, email);
 
-                    scheduleKafkaDispatcher.send("SCHEDULE", userId, schedule);
+                    scheduleKafkaDispatcher.send("SCHEDULE", examId, schedule);
 
-                    var email = new Email(userId + "@teste.com","Your exam is scheduled");
-                    emailKafkaDispatcher.send("SCHEDULE_SEND_EMAIL", userId, email);
+                    var emailCode = new Email(userId + "@teste.com","Your exam is scheduled");
+                    emailKafkaDispatcher.send("SCHEDULE_SEND_EMAIL", examId, emailCode);
 
                 }
             }
