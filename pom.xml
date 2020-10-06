@@ -27,6 +27,8 @@
         <module>schedule-service</module>
         <module>common-kafka</module>
         <module>hi-authorization-service</module>
+        <module>http-schedule-service</module>
+        <module>reading-report-service</module>
     </modules>
 
     <dependencies>
