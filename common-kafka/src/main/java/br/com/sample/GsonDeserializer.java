@@ -10,7 +10,7 @@ import java.util.Map;
 public class GsonDeserializer<T> implements Deserializer<T> {
 
     public static final String TYPE_CONFIG = "br.com.type_config";
-    private final Gson gson = new GsonBuilder().create();
+    private final Gson gson = new GsonBuilder().registerTypeAdapter(Message.class, new MessageAdapter());
     private Class<T> classType;
 
     @Override
