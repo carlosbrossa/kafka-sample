@@ -25,7 +25,7 @@ public class ReadingReportService {
 
     }
 
-    private void parse(ConsumerRecord<String, Pacient> record) throws IOException {
+    private void parse(ConsumerRecord<String, Message<Pacient>> record) throws IOException {
         System.out.println("----------------------");
         System.out.println("processing report schedule for " + record.value());
         System.out.println(record.key());
@@ -33,11 +33,12 @@ public class ReadingReportService {
         System.out.println(record.partition());
         System.out.println(record.offset());
 
-        var pacient = record.value();
-        var target = new File(pacient.getReportPath());
+        var message = record.value();
+        var patient = message.getPayload();
+        var target = new File(patient.getReportPath());
 
         IO.copyTo(SOURCE, target);
-        IO.append(target, "Created for " + pacient.getUuid());
+        IO.append(target, "Created for " + patient.getUuid());
 
         System.out.println("File created: " + target.getAbsolutePath());
 

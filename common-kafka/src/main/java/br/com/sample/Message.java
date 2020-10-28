@@ -18,7 +18,7 @@ public class Message<T> {
                 '}';
     }
 
-    public Object getPayload() {
+    public T getPayload() {
         return payload;
     }
 

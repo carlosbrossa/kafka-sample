@@ -1,13 +1,10 @@
 package br.com.sample;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 
 import java.lang.reflect.Type;
 
-public class MessageAdapter implements JsonSerializer<Message>{
+public class MessageAdapter implements JsonSerializer<Message>, JsonDeserializer<Message> {
 
     @Override
     public JsonElement serialize(Message message, Type type, JsonSerializationContext context) {
@@ -20,4 +17,17 @@ public class MessageAdapter implements JsonSerializer<Message>{
         return jsonObject;
     }
 
+
+    @Override
+    public Message deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        var obj = jsonElement.getAsJsonObject();
+        var payloadType = obj.get("type").getAsString();
+        var correlationId = (CorrelationId)jsonDeserializationContext.deserialize(obj.get("correlationId"), CorrelationId.class);
+        try {
+            var payload = jsonDeserializationContext.deserialize(obj.get("payload"), Class.forName(payloadType));
+            return new Message(correlationId, payload);
+        } catch (ClassNotFoundException e) {
+            throw new JsonParseException(e);
+        }
+    }
 }
