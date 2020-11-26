@@ -28,7 +28,7 @@ public class CreateAuthorizationService {
 
 
 
-    public static void main(String[] args) throws InterruptedException, SQLException {
+    public static void main(String[] args) throws InterruptedException, SQLException, ExecutionException {
 
         var createAuthorizationService = new CreateAuthorizationService();
         try(var kafkaService = new KafkaService(CreateAuthorizationService.class.getSimpleName(),

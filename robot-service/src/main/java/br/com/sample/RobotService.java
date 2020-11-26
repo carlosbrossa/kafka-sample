@@ -10,7 +10,7 @@ public class RobotService {
     private final KafkaDispatcher<Schedule> scheduleDispatcher = new KafkaDispatcher<>();
 
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
 
         var robotService = new RobotService();
         try(var kafkaService = new KafkaService(RobotService.class.getSimpleName(),

@@ -12,7 +12,7 @@ public class ReadingReportService {
 
     private static final Path SOURCE = new File("src/main/resources/report.txt").toPath();
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
 
         var readingReportService = new ReadingReportService();
         try(var kafkaService = new KafkaService(ReadingReportService.class.getSimpleName(),

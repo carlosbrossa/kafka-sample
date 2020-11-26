@@ -30,7 +30,7 @@ public class BatchSendMessageService {
     }
 
 
-    public static void main(String[] args) throws InterruptedException, SQLException {
+    public static void main(String[] args) throws InterruptedException, SQLException, ExecutionException {
 
         var batchSendMessageService = new BatchSendMessageService();
         try(var kafkaService = new KafkaService(BatchSendMessageService.class.getSimpleName(),
