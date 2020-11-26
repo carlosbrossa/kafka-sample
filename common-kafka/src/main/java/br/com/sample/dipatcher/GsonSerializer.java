@@ -1,5 +1,7 @@
-package br.com.sample;
+package br.com.sample.dipatcher;
 
+import br.com.sample.Message;
+import br.com.sample.MessageAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.kafka.common.header.Headers;

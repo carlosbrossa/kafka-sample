@@ -1,5 +1,7 @@
-package br.com.sample;
+package br.com.sample.dipatcher;
 
+import br.com.sample.CorrelationId;
+import br.com.sample.Message;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -29,7 +31,7 @@ public class KafkaDispatcher<T> implements Closeable {
     }
 
     public void send(String topic, String key, CorrelationId id, T payload) throws ExecutionException, InterruptedException {
-        var value = new Message<T>(id, payload);
+        var value = new Message<T>(id.continueWith("_" + topic), payload);
         var record = new ProducerRecord<>(topic, key, value);
         Callback callback = (data, ex) -> {
             if (ex != null) {

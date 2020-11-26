@@ -1,5 +1,7 @@
 package br.com.sample;
 
+import br.com.sample.dipatcher.KafkaDispatcher;
+
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -19,17 +21,19 @@ public class NewScheduleMain {
                     var email = Math.random() + "@email";
                     var schedule = new Schedule(userId, scheduleId, examId, email);
 
+                    CorrelationId correlationId = new CorrelationId(NewScheduleMain.class.getSimpleName());
+
                     scheduleKafkaDispatcher.send(
                             "SCHEDULE",
                             examId,
-                            new CorrelationId(NewScheduleMain.class.getSimpleName()),
+                            correlationId,
                             schedule);
 
                     var emailCode = new Email(userId + "@teste.com","Your exam is scheduled");
                     emailKafkaDispatcher.send(
                             "SCHEDULE_SEND_EMAIL",
                             examId,
-                            new CorrelationId(NewScheduleMain.class.getSimpleName()),
+                            correlationId,
                             emailCode);
 
                 }

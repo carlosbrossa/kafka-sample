@@ -1,5 +1,6 @@
 package br.com.sample;
 
+import br.com.sample.consumer.KafkaService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.sql.Connection;

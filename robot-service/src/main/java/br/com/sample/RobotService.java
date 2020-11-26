@@ -1,5 +1,7 @@
 package br.com.sample;
 
+import br.com.sample.consumer.KafkaService;
+import br.com.sample.dipatcher.KafkaDispatcher;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.util.Map;

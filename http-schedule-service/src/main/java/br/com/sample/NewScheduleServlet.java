@@ -1,8 +1,7 @@
 package br.com.sample;
 
-import org.eclipse.jetty.servlet.Source;
+import br.com.sample.dipatcher.KafkaDispatcher;
 
-import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

@@ -1,5 +1,8 @@
-package br.com.sample;
+package br.com.sample.consumer;
 
+import br.com.sample.Message;
+import br.com.sample.dipatcher.GsonSerializer;
+import br.com.sample.dipatcher.KafkaDispatcher;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
