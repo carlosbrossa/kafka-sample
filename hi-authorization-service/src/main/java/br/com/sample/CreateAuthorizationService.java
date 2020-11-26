@@ -34,14 +34,13 @@ public class CreateAuthorizationService {
         try(var kafkaService = new KafkaService(CreateAuthorizationService.class.getSimpleName(),
                 "SCHEDULE",
                 createAuthorizationService::parse,
-                Schedule.class,
                 Map.of())) {
             kafkaService.run();
         }
 
     }
 
-    private void parse(ConsumerRecord<String, Schedule> record) throws InterruptedException, ExecutionException, SQLException {
+    private void parse(ConsumerRecord<String, Message<Schedule>> record) throws InterruptedException, ExecutionException, SQLException {
         System.out.println("----------------------");
         System.out.println("processing new schedule");
         System.out.println(record.key());
@@ -54,7 +53,7 @@ public class CreateAuthorizationService {
 
         if(haveAuthorization(number)){
             System.out.println("scheduled with authorization");
-            insertAuthorization(record.value());
+            insertAuthorization(record.value().getPayload());
         }else{
             System.out.println("discard schedule for authorization");
         }

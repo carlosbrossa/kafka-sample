@@ -15,13 +15,12 @@ public class LogService {
         try(var kafkaService = new KafkaService(LogService.class.getSimpleName(),
                 Pattern.compile("SCHEDULE.*"),
                 logService::parse,
-                String.class,
                 Map.of(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName()))){
             kafkaService.run();
         }
     }
 
-    private void parse(ConsumerRecord<String, String> record) {
+    private void parse(ConsumerRecord<String, Message<String>> record) {
         System.out.println("----------------------");
         System.out.println("logging: " + record.topic());
         System.out.println(record.key());

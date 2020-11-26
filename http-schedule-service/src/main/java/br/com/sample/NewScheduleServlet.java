@@ -33,10 +33,18 @@ public class NewScheduleServlet extends HttpServlet {
             var exam = req.getParameter("exam");
             var schedule = new Schedule(userId, scheduleId, exam, email);
 
-            scheduleKafkaDispatcher.send("SCHEDULE", email, schedule);
+            scheduleKafkaDispatcher.send(
+                    "SCHEDULE",
+                    email,
+                    new CorrelationId(this.getClass().getSimpleName()),
+                    schedule);
 
             var emailCode = new Email(email,"Your exam is scheduled");
-            emailKafkaDispatcher.send("SCHEDULE_SEND_EMAIL", email, emailCode);
+            emailKafkaDispatcher.send(
+                    "SCHEDULE_SEND_EMAIL",
+                    email,
+                    new CorrelationId(this.getClass().getSimpleName()),
+                    emailCode);
 
             resp.getWriter().println("Exam scheduled");
 

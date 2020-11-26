@@ -16,9 +16,8 @@ public class ReadingReportService {
 
         var readingReportService = new ReadingReportService();
         try(var kafkaService = new KafkaService(ReadingReportService.class.getSimpleName(),
-                "PACIENT_GENERATE_READING_REPORT",
+                "SCHEDULE_PACIENT_GENERATE_READING_REPORT",
                 readingReportService::parse,
-                Pacient.class,
                 Map.of())) {
             kafkaService.run();
         }

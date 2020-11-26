@@ -34,9 +34,8 @@ public class BatchSendMessageService {
 
         var batchSendMessageService = new BatchSendMessageService();
         try(var kafkaService = new KafkaService(BatchSendMessageService.class.getSimpleName(),
-                "SEND_MESSAGE_TO_ALL_PACIENTS",
+                "SCHEDULE_SEND_MESSAGE_TO_ALL_PACIENTS",
                 batchSendMessageService::parse,
-                String.class,
                 Map.of())) {
             kafkaService.run();
         }
@@ -52,10 +51,16 @@ public class BatchSendMessageService {
         var message = record.value();
         System.out.println("Topic: " + message.getPayload());
 
-        batchDispatcher.send(message.getPayload(), UUID.randomUUID().toString(), new Pacient(UUID.randomUUID().toString()));
+        batchDispatcher.send(message.getPayload(),
+                UUID.randomUUID().toString(),
+                message.getId().continueWith(this.getClass().getSimpleName()),
+                new Pacient(UUID.randomUUID().toString()));
 
         for(Pacient pacient : getAllPacients()){
-            batchDispatcher.send(message.getPayload(), pacient.getUuid(), pacient);
+            batchDispatcher.send(message.getPayload(),
+                    pacient.getUuid(),
+                    message.getId().continueWith(this.getClass().getSimpleName()),
+                    pacient);
         }
 
 

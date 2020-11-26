@@ -16,23 +16,23 @@ public class KafkaService<T> implements Closeable {
     private final KafkaConsumer<String, Message<T>> consumer;
     private final ConsumerFunction parse;
 
-    public KafkaService(String groupId, String topic, ConsumerFunction<T> parse, Class<T> type, Map<String,String> extraProperties ){
-        this(parse, groupId, type, extraProperties);
+    public KafkaService(String groupId, String topic, ConsumerFunction<T> parse, Map<String,String> extraProperties ){
+        this(parse, groupId, extraProperties);
         consumer.subscribe(Collections.singletonList(topic));
     }
 
-    public KafkaService(String groupId, Pattern topic, ConsumerFunction<T> parse, Class<T> type, Map<String,String> extraProperties) {
-    this(parse, groupId, type, extraProperties);
+    public KafkaService(String groupId, Pattern topic, ConsumerFunction<T> parse, Map<String,String> extraProperties) {
+    this(parse, groupId, extraProperties);
         consumer.subscribe(topic);
     }
 
-    public KafkaService(ConsumerFunction<T> parse, String groupId, Class<T> type, Map<String,String> extraProperties) {
+    public KafkaService(ConsumerFunction<T> parse, String groupId, Map<String,String> extraProperties) {
         this.parse = parse;
-        this.consumer = new KafkaConsumer(properties(type, groupId, extraProperties));
+        this.consumer = new KafkaConsumer(properties(groupId, extraProperties));
     }
 
 
-    private Properties properties(Class<T> type, String groupId, Map<String, String> extraProperties) {
+    private Properties properties(String groupId, Map<String, String> extraProperties) {
         var properties = new Properties();
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
@@ -40,6 +40,7 @@ public class KafkaService<T> implements Closeable {
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1"); //maximo de poll para comitar de um em um e evitar erros de balanceamento
         properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
+        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
         properties.putAll(extraProperties);
         return properties;
     }

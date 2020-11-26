@@ -16,14 +16,13 @@ public class RobotService {
         try(var kafkaService = new KafkaService(RobotService.class.getSimpleName(),
                 "SCHEDULE",
                 robotService::parse,
-                Schedule.class,
                 Map.of())) {
             kafkaService.run();
         }
 
     }
 
-    private void parse(ConsumerRecord<String, Schedule> record) throws InterruptedException, ExecutionException {
+    private void parse(ConsumerRecord<String, Message<Schedule>> record) throws InterruptedException, ExecutionException {
         System.out.println("----------------------");
         System.out.println("processing new schedule");
         System.out.println(record.key());
@@ -32,16 +31,25 @@ public class RobotService {
         System.out.println(record.offset());
         Thread.sleep(3000);
 
-        var email = record.value().getEmail();
+        var schedule = record.value().getPayload();
+
+        var email = schedule.getEmail();
 
         var number = (Math.random() * (1000 - 1)) + 1;
 
         if(number > 500){
             System.out.println("scheduled");
-            scheduleDispatcher.send("SCHEDULE_CONFIRMED", email, record.value());
+            scheduleDispatcher.send("SCHEDULE_CONFIRMED",
+                    email,
+                    record.value().getId().continueWith(this.getClass().getSimpleName()),
+                    schedule);
         }else{
             System.out.println("conflict schedule");
-            scheduleDispatcher.send("SCHEDULE_CONFLICT", email, record.value());
+            scheduleDispatcher.send(
+                    "SCHEDULE_CONFLICT",
+                    email,
+                    record.value().getId().continueWith(this.getClass().getSimpleName()),
+                    schedule);
         }
     }
 

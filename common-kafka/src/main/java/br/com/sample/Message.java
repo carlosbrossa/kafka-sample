@@ -22,7 +22,7 @@ public class Message<T> {
         return payload;
     }
 
-    public Object getId() {
+    public CorrelationId getId() {
         return id;
     }
 }
