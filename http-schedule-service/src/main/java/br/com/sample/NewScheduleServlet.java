@@ -13,13 +13,11 @@ import java.util.concurrent.ExecutionException;
 public class NewScheduleServlet extends HttpServlet {
 
     private final KafkaDispatcher scheduleKafkaDispatcher = new KafkaDispatcher<Schedule>();
-    private final KafkaDispatcher emailKafkaDispatcher = new KafkaDispatcher<Email>();
 
     @Override
     public void destroy() {
         super.destroy();
         scheduleKafkaDispatcher.close();
-        emailKafkaDispatcher.close();
     }
 
     @Override
@@ -38,12 +36,6 @@ public class NewScheduleServlet extends HttpServlet {
                     new CorrelationId(this.getClass().getSimpleName()),
                     schedule);
 
-            var emailCode = new Email(email,"Your exam is scheduled");
-            emailKafkaDispatcher.send(
-                    "SCHEDULE_SEND_EMAIL",
-                    email,
-                    new CorrelationId(this.getClass().getSimpleName()),
-                    emailCode);
 
             resp.getWriter().println("Exam scheduled");
 
