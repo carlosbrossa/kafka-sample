@@ -1,15 +1,15 @@
 package br.com.sample;
 
-import br.com.sample.consumer.KafkaService;
+import br.com.sample.consumer.ConsumerService;
+import br.com.sample.consumer.ServiceRunner;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class EmailService implements ConsumerService<Email> {
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-        new ServiceProvider().run(EmailService::new);
+        new ServiceRunner(EmailService::new).start(5);
     }
 
     public String getConsumerGroup(){

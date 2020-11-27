@@ -1,6 +1,8 @@
 package br.com.sample;
 
+import br.com.sample.consumer.ConsumerService;
 import br.com.sample.consumer.KafkaService;
+import br.com.sample.consumer.ServiceRunner;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import java.io.File;
@@ -9,23 +11,16 @@ import java.nio.file.Path;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-public class ReadingReportService {
+public class ReadingReportService implements ConsumerService<Pacient> {
 
     private static final Path SOURCE = new File("src/main/resources/report.txt").toPath();
 
     public static void main(String[] args) throws InterruptedException, ExecutionException {
-
-        var readingReportService = new ReadingReportService();
-        try(var kafkaService = new KafkaService(ReadingReportService.class.getSimpleName(),
-                "SCHEDULE_PACIENT_GENERATE_READING_REPORT",
-                readingReportService::parse,
-                Map.of())) {
-            kafkaService.run();
-        }
+        new ServiceRunner(ReadingReportService::new).start(5);
 
     }
 
-    private void parse(ConsumerRecord<String, Message<Pacient>> record) throws IOException {
+    public void parse(ConsumerRecord<String, Message<Pacient>> record)  {
         System.out.println("----------------------");
         System.out.println("processing report schedule for " + record.value());
         System.out.println(record.key());
@@ -37,11 +32,25 @@ public class ReadingReportService {
         var patient = message.getPayload();
         var target = new File(patient.getReportPath());
 
-        IO.copyTo(SOURCE, target);
-        IO.append(target, "Created for " + patient.getUuid());
+        try {
+            IO.copyTo(SOURCE, target);
+            IO.append(target, "Created for " + patient.getUuid());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         System.out.println("File created: " + target.getAbsolutePath());
 
+    }
+
+    @Override
+    public String getTopic() {
+        return "SCHEDULE_PACIENT_GENERATE_READING_REPORT";
+    }
+
+    @Override
+    public String getConsumerGroup() {
+        return ReadingReportService.class.getSimpleName();
     }
 
 }
